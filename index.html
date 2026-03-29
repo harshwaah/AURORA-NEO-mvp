@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AURORA NEO | Dashboard</title>
+  <meta name="description" content="AURORA NEO Neonatal Monitoring Dashboard — NICU Ward A overview for Dr. Shravan"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "background": "#fdf9ed",
+            "surface": "#fffbff",
+            "sc-low": "#fdf9ed",
+            "sc": "#f7f4e7",
+            "sc-high": "#f2eee1",
+            "sc-highest": "#ece8da",
+            "sc-lowest": "#ffffff",
+            "primary": "#7e5b64",
+            "primary-c": "#ffd1dc",
+            "on-primary": "#ffffff",
+            "on-primary-c": "#52333c",
+            "secondary": "#516870",
+            "secondary-c": "#cee6f0",
+            "on-secondary-c": "#3f555d",
+            "tertiary": "#626374",
+            "tertiary-c": "#e6e6fa",
+            "on-surface": "#393831",
+            "on-surface-v": "#66645c",
+            "outline": "#838178",
+            "outline-v": "#bcb9af",
+            "error": "#c12048",
+            "error-c": "#f74b6d",
+          },
+          fontFamily: {
+            "headline": ["Plus Jakarta Sans","sans-serif"],
+            "body": ["Be Vietnam Pro","sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    *{-webkit-font-smoothing:antialiased;}
+    body{font-family:'Be Vietnam Pro',sans-serif;background-color:#fdf9ed;color:#393831;}
+    h1,h2,h3,.headline{font-family:'Plus Jakarta Sans',sans-serif;}
+    .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+    .glass-nav{background:rgba(253,249,237,0.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+    .card-lift{transition:transform 0.22s ease,box-shadow 0.22s ease;}
+    .card-lift:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(126,91,100,0.1);}
+    .pulse{animation:pulse-k 2s ease-in-out infinite;}
+    @keyframes pulse-k{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.55;transform:scale(0.88);}}
+    .live-glow{animation:lglow 2.5s ease-in-out infinite;}
+    @keyframes lglow{0%,100%{box-shadow:0 0 0 0 rgba(247,75,109,0.25);}50%{box-shadow:0 0 14px 5px rgba(247,75,109,0.1);}}
+    .sidebar-link{transition:all 0.18s;}
+    .accent-line{height:3px;background:linear-gradient(90deg,#7e5b64,#ffd1dc);border-radius:9999px;}
+  </style>
+</head>
+<body class="min-h-screen" style="background:#fdf9ed;">
+
+<!-- TOP NAV -->
+<header class="glass-nav fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-8 h-16" style="border-bottom:1px solid rgba(188,185,175,0.15);">
+  <div class="flex items-center gap-3">
+    <span class="text-xl font-extrabold tracking-tighter" style="color:#7e5b64;font-family:'Plus Jakarta Sans',sans-serif;">AURORA NEO</span>
+  </div>
+  <nav class="hidden md:flex items-center gap-1">
+    <a href="index.html" id="nav-dashboard" class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest" style="color:#7e5b64;background:rgba(126,91,100,0.09);">Dashboard</a>
+    <a href="#" class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-black/5 transition-all" style="color:#66645c;">Analytics</a>
+    <a href="#" class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-black/5 transition-all" style="color:#66645c;">Archive</a>
+  </nav>
+  <div class="flex items-center gap-2">
+    <button class="p-2.5 rounded-full hover:bg-black/5 transition-all" title="Hardware Status">
+      <span class="material-symbols-outlined" style="color:#66645c;font-size:20px;">sensors</span>
+    </button>
+    <button class="p-2.5 rounded-full hover:bg-black/5 transition-all relative" title="Notifications">
+      <span class="material-symbols-outlined" style="color:#66645c;font-size:20px;">notifications</span>
+      <span class="absolute top-2 right-2 w-2 h-2 rounded-full" style="background:#c12048;"></span>
+    </button>
+    <div class="w-9 h-9 rounded-full flex items-center justify-center border-2 overflow-hidden" style="border-color:#ffd1dc;background:#ffd1dc;">
+      <span class="material-symbols-outlined" style="color:#7e5b64;font-size:18px;font-variation-settings:'FILL' 1;">person</span>
+    </div>
+  </div>
+</header>
+
+<div class="flex min-h-screen pt-16">
+
+  <!-- SIDEBAR -->
+  <aside class="hidden lg:flex flex-col fixed left-4 top-20 bottom-4 w-64 rounded-[2rem] p-6 z-40" style="background:#ffffff;box-shadow:0 8px 40px rgba(0,0,0,0.04);">
+    <div class="flex items-center gap-3 mb-8 p-3 rounded-2xl" style="background:#fdf9ed;">
+      <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background:#ffd1dc;">
+        <span class="material-symbols-outlined" style="color:#7e5b64;font-size:20px;font-variation-settings:'FILL' 1;">clinical_notes</span>
+      </div>
+      <div>
+        <p class="font-bold text-sm" style="font-family:'Plus Jakarta Sans',sans-serif;color:#393831;">NICU Ward A</p>
+        <p class="text-xs" style="color:#66645c;">Station 04</p>
+      </div>
+    </div>
+    <nav class="flex flex-col gap-1 flex-grow">
+      <a href="index.html" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-2xl font-semibold text-sm" style="background:#ffd1dc;color:#52333c;">
+        <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1;">group</span>
+        Patient List
+      </a>
+      <a href="#" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-2xl text-sm hover:bg-black/5" style="color:#66645c;">
+        <span class="material-symbols-outlined" style="font-size:18px;">emergency_home</span>
+        Global Alerts
+      </a>
+      <a href="#" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-2xl text-sm hover:bg-black/5" style="color:#66645c;">
+        <span class="material-symbols-outlined" style="font-size:18px;">receipt_long</span>
+        System Logs
+      </a>
+    </nav>
+    <div class="mt-auto flex flex-col gap-1">
+      <button class="w-full py-3 px-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 mb-3 hover:opacity-90 active:scale-95 transition-all" style="background:#7e5b64;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;">
+        <span class="material-symbols-outlined" style="font-size:18px;">add</span>
+        Add New Patient
+      </button>
+      <div class="flex flex-col gap-1 pt-3" style="border-top:1px solid rgba(188,185,175,0.2);">
+        <a href="#" class="sidebar-link flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm hover:bg-black/5" style="color:#66645c;">
+          <span class="material-symbols-outlined" style="font-size:18px;">settings</span>Settings
+        </a>
+        <a href="#" class="sidebar-link flex items-center gap-3 py-2.5 px-4 rounded-xl text-sm hover:bg-black/5" style="color:#66645c;">
+          <span class="material-symbols-outlined" style="font-size:18px;">help</span>Support
+        </a>
+        <!-- Demo Mode Toggle -->
+        <div class="mt-2 p-4 rounded-2xl" style="background:#fdf9ed;">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-xs font-bold" style="font-family:'Plus Jakarta Sans',sans-serif;color:#393831;">Demo Mode</p>
+              <p class="text-[9px] mt-0.5" style="color:#66645c;">Presentation-ready data</p>
+            </div>
+            <button id="demo-toggle" onclick="toggleDemo()" title="Toggle Demo Mode"
+              class="relative flex-shrink-0 rounded-full transition-all duration-300 focus:outline-none"
+              style="width:44px;height:24px;background:#ece8da;">
+              <span id="demo-thumb"
+                class="absolute top-1 rounded-full transition-all duration-300"
+                style="left:4px;width:16px;height:16px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.18);"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="flex-1 lg:ml-72 px-6 lg:px-10 py-8 pb-24 md:pb-12">
+
+    <!-- Greeting -->
+    <section class="mb-8">
+      <h1 id="greeting-text" class="text-4xl lg:text-5xl font-extrabold tracking-tight mb-2" style="font-family:'Plus Jakarta Sans',sans-serif;color:#393831;">Good morning, Dr. Shravan</h1>
+      <p class="text-base" style="color:#66645c;">Ward A status is currently <span class="font-semibold" style="color:#516870;">Optimal</span>. 6 active units monitored.</p>
+    </section>
+    <div class="accent-line mb-8 opacity-50"></div>
+
+    <!-- Patient Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+
+      <!-- BED 04 — LIVE FEATURED (2 col wide) -->
+      <div class="col-span-1 md:col-span-2 relative overflow-hidden rounded-[2rem] p-8 card-lift live-glow" style="background:linear-gradient(135deg,#ffffff 0%,#fdf9ed 100%);box-shadow:0 4px 24px rgba(126,91,100,0.07);">
+        <!-- Live badge -->
+        <div class="absolute top-6 right-6 flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest" style="background:#f74b6d;color:#fff;">
+          <span class="w-1.5 h-1.5 rounded-full bg-white pulse"></span> Live Monitor
+        </div>
+        <!-- Baby header -->
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-14 h-14 rounded-[1.25rem] flex items-center justify-center" style="background:#ffd1dc;">
+            <span class="material-symbols-outlined" style="color:#7e5b64;font-size:26px;font-variation-settings:'FILL' 1;">child_care</span>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold" style="font-family:'Plus Jakarta Sans',sans-serif;color:#393831;">Bed 04</h2>
+            <p class="text-sm font-medium" style="color:#66645c;">Akhi &nbsp;•&nbsp; 32 Weeks Gestation</p>
+          </div>
+        </div>
+        <!-- Mini vitals -->
+        <div class="grid grid-cols-3 gap-3 mb-6">
+          <div class="p-4 rounded-2xl" style="background:#f7f4e7;">
+            <p class="text-[9px] font-bold uppercase tracking-widest mb-1" style="color:#66645c;">Heart Rate</p>
+            <p class="text-xl font-bold" style="font-family:'Plus Jakarta Sans',sans-serif;color:#7e5b64;">142 <span class="text-xs font-medium">bpm</span></p>
+          </div>
+          <div class="p-4 rounded-2xl" style="background:#f7f4e7;">
+            <p class="text-[9px] font-bold uppercase tracking-widest mb-1" style="color:#66645c;">SpO2</p>
+            <p class="text-xl font-bold" style="font-family:'Plus Jakarta Sans',sans-serif;color:#516870;">98 <span class="text-xs font-medium">%</span></p>
+          </div>
+          <div class="p-4 rounded-2xl" style="background:rgba(255,209,220,0.3);">
+            <p class="text-[9px] font-bold uppercase tracking-widest mb-1" style="color:#66645c;">Body Temp</p>
+            <p class="text-xl font-bold" style="font-family:'Plus Jakarta Sans',sans-serif;color:#7e5b64;">36.8 <span class="text-xs font-medium">°C</span></p>
+          </div>
+        </div>
+        <!-- Footer -->
+        <div class="flex justify-between items-center">
+          <p class="text-xs flex items-center gap-1.5" style="color:#66645c;">
+            <span class="material-symbols-outlined" style="font-size:14px;">history</span> Last Updated: 2m ago
+          </p>
+          <a href="monitor.html" class="px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all" style="background:#7e5b64;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;box-shadow:0 4px 16px rgba(126,91,100,0.3);">
+            Open Live Monitor
+          </a>
+        </div>
+        <!-- Decorative blob -->
+        <div class="absolute -bottom-16 -right-16 w-60 h-60 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(255,209,220,0.35) 0%,transparent 70%);"></div>
+      </div>
+
+      <!-- BED 01 — Sophia R. — Stable -->
+      <div class="bg-white rounded-[2rem] p-7 flex flex-col gap-5 card-lift" style="box-shadow:0 4px 20px rgba(0,0,0,0.03);">
+        <div class="flex justify-between items-start">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-[1rem] flex items-center justify-center" style="background:#cee6f0;">
+              <span class="material-symbols-outlined" style="color:#516870;font-size:20px;">child_care</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold" style="font-family:'Plus Jakarta Sans',sans-serif;color:#393831;">Bed 01</h3>
+              <p class="text-xs" style="color:#66645c;">Sophia R.</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest" style="background:#cee6f0;color:#3f555d;">Stable</span>
+        </div>
+        <div class="flex-grow flex items-end gap-1 px-2 py-3 rounded-2xl overflow-hidden" style="background:#f7f4e7;height:52px;">
+          <div class="flex-1 rounded-t-sm" style="height:55%;background:rgba(81,104,112,0.22);"></div>
+          <div class="flex-1 rounded-t-sm" style="height:70%;background:rgba(81,104,112,0.27);"></div>
+          <div class="flex-1 rounded-t-sm" style="height:62%;background:rgba(81,104,112,0.22);"></div>
+          <div class="flex-1 rounded-t-sm" style="height:78%;background:rgba(81,104,112,0.3);"></div>
+          <div class="flex-1 rounded-t-sm" style="height:66%;background:rgba(81,104,112,0.3);"></div>
+          <div class="flex-1 rounded-t-sm" style="height:73%;background:rgba(81,104,112,0.3);"></div>
+          <div class="flex-1 rounded-t-sm" style="height:68%;background:rgba(81,104,112,0.35);"></div>
+          <div class="flex-1 rounded-t-sm" style="height:82%;background:rgba(81,104,112,0.35);"></div>
+        </div>
+        <div class="flex justify-between items-center pt-3" style="border-top:1px solid #f2eee1;">
+          <span class="text-xs" style="color:#66645c;">Updated 5m ago</span>
+          <span class="material-symbols-outlined" style="color:#66645c;font-size:16px;">chevron_right</span>
+        </div>
+      </div>
+
+      <!-- BED 02 — Noah M. — Watch -->
+      <div class="bg-white rounded-[2rem] p-7 flex flex-col gap-5 card-lift" style="box-shadow:0 4px 20px rgba(0,0,0,0.03);">
+        <div class="flex justify-between items-start">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-[1rem] flex items-center justify-center" style="background:#e6e6fa;">
+              <span class="material-symbols-outlined" style="color:#626374;font-size:20px;">child_care</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold" style="font-family:'Plus Jakarta Sans',sans-serif;color:#393831;">Bed 02</h3>
+              <p class="text-xs" style="color:#66645c;">Noah M.</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest" style="background:#f0c3ce;color:#7e5b64;">Watch</span>
+        </div>
+        <div class="flex-grow">
+          <div class="flex justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider" style="color:#66645c;">Oxygen</span>
+            <span class="text-xs font-bold" style="color:#c12048;">91%</span>
+          </div>
+          <div class="w-full h-2 rounded-full overflow-hidden" style="background:#ece8da;">
+            <div class="h-full rounded-full" style="width:91%;background:#f74b6d;"></div>
+          </div>
+          <p class="text-xs mt-2" style="color:#c12048;">Below target threshold</p>
+        </div>
+        <div class="flex justify-between items-center pt-3" style="border-top:1px solid #f2eee1;">
+          <span class="text-xs" style="color:#66645c;">Updated 1m ago</span>
+          <span class="material-symbols-outlined" style="color:#66645c;font-size:16px;">chevron_right</span>
+        </div>
+      </div>
+
+      <!-- BED 03 — Ava L. — Stable -->
+      <div class="bg-white rounded-[2rem] p-7 flex flex-col gap-5 card-lift" style="box-shadow:0 4px 20px rgba(0,0,0,0.03);">
+        <div class="flex justify-between items-start">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-[1rem] flex items-center justify-center" style="background:#ece8da;">
+              <span class="material-symbols-outlined" style="color:#66645c;font-size:20px;">child_care</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold" style="font-family:'Plus Jakarta Sans',sans-serif;color:#393831;">Bed 03</h3>
+              <p class="text-xs" style="color:#66645c;">Ava L.</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest" style="background:#cee6f0;color:#3f555d;">Stable</span>
+        </div>
+        <div class="flex-grow">
+          <p class="text-sm leading-relaxed italic" style="color:#66645c;">Routine assessment completed. Phototherapy continued.</p>
+        </div>
+        <div class="flex justify-between items-center pt-3" style="border-top:1px solid #f2eee1;">
+          <span class="text-xs" style="color:#66645c;">Updated 12m ago</span>
+          <span class="material-symbols-outlined" style="color:#66645c;font-size:16px;">chevron_right</span>
+        </div>
+      </div>
+
+      <!-- BED 05 — James W. — Stable -->
+      <div class="bg-white rounded-[2rem] p-7 flex flex-col gap-5 card-lift" style="box-shadow:0 4px 20px rgba(0,0,0,0.03);">
+        <div class="flex justify-between items-start">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-[1rem] flex items-center justify-center" style="background:#ece8da;">
+              <span class="material-symbols-outlined" style="color:#66645c;font-size:20px;">child_care</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold" style="font-family:'Plus Jakarta Sans',sans-serif;color:#393831;">Bed 05</h3>
+              <p class="text-xs" style="color:#66645c;">James W.</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest" style="background:#cee6f0;color:#3f555d;">Stable</span>
+        </div>
+        <div class="grid grid-cols-2 gap-3 flex-grow">
+          <div class="text-center p-3 rounded-2xl" style="background:#f7f4e7;">
+            <p class="text-[9px] font-bold uppercase tracking-wider mb-1" style="color:#66645c;">HR</p>
+            <p class="text-2xl font-bold" style="font-family:'Plus Jakarta Sans',sans-serif;color:#393831;">135</p>
+          </div>
+          <div class="text-center p-3 rounded-2xl" style="background:#f7f4e7;">
+            <p class="text-[9px] font-bold uppercase tracking-wider mb-1" style="color:#66645c;">SpO2</p>
+            <p class="text-2xl font-bold" style="font-family:'Plus Jakarta Sans',sans-serif;color:#393831;">97%</p>
+          </div>
+        </div>
+        <div class="flex justify-between items-center pt-3" style="border-top:1px solid #f2eee1;">
+          <span class="text-xs" style="color:#66645c;">Updated 8m ago</span>
+          <span class="material-symbols-outlined" style="color:#66645c;font-size:16px;">chevron_right</span>
+        </div>
+      </div>
+
+      <!-- BED 06 — Mia K. — Critical -->
+      <div class="bg-white rounded-[2rem] p-7 flex flex-col gap-5 card-lift" style="box-shadow:0 4px 20px rgba(0,0,0,0.03);border:1.5px solid rgba(247,75,109,0.18);">
+        <div class="flex justify-between items-start">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-[1rem] flex items-center justify-center" style="background:rgba(247,75,109,0.1);">
+              <span class="material-symbols-outlined" style="color:#c12048;font-size:20px;font-variation-settings:'FILL' 1;">warning</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold" style="font-family:'Plus Jakarta Sans',sans-serif;color:#393831;">Bed 06</h3>
+              <p class="text-xs" style="color:#66645c;">Mia K.</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest" style="background:#f74b6d;color:#fff;">Critical</span>
+        </div>
+        <div class="p-3 rounded-2xl border-l-4" style="background:rgba(247,75,109,0.05);border-color:#f74b6d;">
+          <p class="text-xs font-bold mb-1" style="color:#c12048;">APNEA ALERT</p>
+          <p class="text-xs" style="color:#66645c;">Responsive. Monitoring closely.</p>
+        </div>
+        <div class="flex justify-between items-center pt-3" style="border-top:1px solid #f2eee1;">
+          <span class="text-xs font-semibold pulse" style="color:#c12048;">Updated Now</span>
+          <span class="material-symbols-outlined" style="color:#66645c;font-size:16px;">chevron_right</span>
+        </div>
+      </div>
+
+    </div><!-- /grid -->
+  </main>
+</div><!-- /flex -->
+
+<!-- MOBILE NAV -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 flex justify-around items-center px-4 py-3 z-50" style="background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);border-top:1px solid rgba(188,185,175,0.2);">
+  <button class="flex flex-col items-center gap-1">
+    <span class="material-symbols-outlined" style="color:#7e5b64;font-size:22px;font-variation-settings:'FILL' 1;">grid_view</span>
+    <span class="text-[9px] font-bold uppercase tracking-wide" style="color:#7e5b64;">Ward</span>
+  </button>
+  <button class="flex flex-col items-center gap-1">
+    <span class="material-symbols-outlined" style="color:#66645c;font-size:22px;">analytics</span>
+    <span class="text-[9px] font-bold uppercase tracking-wide" style="color:#66645c;">Data</span>
+  </button>
+  <div class="-mt-5">
+    <button class="w-14 h-14 rounded-full flex items-center justify-center shadow-lg" style="background:#7e5b64;color:#fff;">
+      <span class="material-symbols-outlined" style="font-size:24px;">add</span>
+    </button>
+  </div>
+  <button class="flex flex-col items-center gap-1">
+    <span class="material-symbols-outlined" style="color:#66645c;font-size:22px;">notifications</span>
+    <span class="text-[9px] font-bold uppercase tracking-wide" style="color:#66645c;">Alerts</span>
+  </button>
+  <button class="flex flex-col items-center gap-1">
+    <span class="material-symbols-outlined" style="color:#66645c;font-size:22px;">person</span>
+    <span class="text-[9px] font-bold uppercase tracking-wide" style="color:#66645c;">Profile</span>
+  </button>
+</nav>
+
+<script>
+  // Time-based greeting
+  (function(){
+    const h = new Date().getHours();
+    let g = h>=5&&h<12?"Good morning":h>=12&&h<17?"Good afternoon":h>=17&&h<21?"Good evening":"Good night";
+    document.getElementById("greeting-text").textContent = g + ", Dr. Shravan";
+  })();
+
+  // ── Demo Mode Toggle ─────────────────────────────────────────────────────
+  const DEMO_KEY = 'aurora_demo';
+
+  function applyToggleUI(on) {
+    const btn   = document.getElementById('demo-toggle');
+    const thumb = document.getElementById('demo-thumb');
+    if (!btn || !thumb) return;
+    btn.style.background        = on ? '#7e5b64' : '#ece8da';
+    thumb.style.left            = on ? '24px'    : '4px';
+    thumb.style.background      = '#ffffff';
+  }
+
+  function toggleDemo() {
+    const next = !(localStorage.getItem(DEMO_KEY) === 'true');
+    localStorage.setItem(DEMO_KEY, next ? 'true' : 'false');
+    applyToggleUI(next);
+  }
+
+  // Apply saved state on load
+  applyToggleUI(localStorage.getItem(DEMO_KEY) === 'true');
+</script>
+</body>
+</html>

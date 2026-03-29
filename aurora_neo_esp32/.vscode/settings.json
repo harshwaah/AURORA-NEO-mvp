@@ -1,0 +1,7 @@
+{
+  "arduino.path": "C:/Program Files/Arduino IDE",
+  "arduino.commandPath": "arduino-ide.exe",
+  "arduino.logLevel": "info",
+  "arduino.allowPDEFiletype": false,
+  "arduino.enableUSBDetection": true
+}
