@@ -244,7 +244,7 @@ Interaction behavior:
 
 ### Body Temperature
 - **Important implementation note:** The UI label and mapping chip reference backend field key `temp`, but the displayed temperature value is not read from backend runtime updates.
-- Rendered value is simulated from `SIMULATED_TEMP = 36.8` with absolute ±`0.12` oscillation (effective value range 36.68–36.92°C before display rounding), updated every 2 seconds.
+- Rendered value is simulated from `SIMULATED_TEMP = 36.8` with symmetric ±`0.12` oscillation (effective value range 36.68–36.92°C before display rounding), updated every 2 seconds.
 - This matches the current prototype/hackathon implementation where body temperature is intentionally simulated in this dashboard iteration for presentation stability and hardware-stage constraints.
 - Display: largest number on page, pink temperature panel.
 
@@ -405,7 +405,7 @@ Guidance: preserve current visual system while adding non-visual support progres
 
 ## 17. Current Backend Mapping
 Endpoint contract in the current implementation: `GET BASE_URL + "/data"` (CORS), polled every `POLL_MS = 3000`.
-`BASE_URL` is currently set as a hardcoded constant in `monitor.html` runtime script (`const BASE_URL = "..."` around line 337 in current file) and is configured by editing that value to the active ESP32 host for the environment.
+`BASE_URL` is currently set as a hardcoded constant in `monitor.html` runtime script (`const BASE_URL = "..."` in the main constants block) and is configured by editing that value to the active ESP32 host for the environment.
 This manual constant edit is the current intended prototype configuration approach.
 
 Expected payload fields:
