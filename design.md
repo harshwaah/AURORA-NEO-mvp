@@ -243,8 +243,9 @@ Interaction behavior:
 - Logic: stable >=95, watch 90–94, critical <90.
 
 ### Body Temperature
-- **Important implementation note:** Data label maps to `temp`, but the displayed value is not read from backend runtime updates.
+- **Important implementation note:** The UI label and mapping chip reference backend field key `temp`, but the displayed temperature value is not read from backend runtime updates.
 - Rendered value is simulated from `SIMULATED_TEMP = 36.8` with ±`0.12` oscillation, updated every 2 seconds.
+- This matches the current prototype/hackathon implementation where body temperature is intentionally simulated in the dashboard iteration.
 - Display: largest number on page, pink temperature panel.
 
 ### Ambient Temperature
@@ -364,6 +365,8 @@ Current implementation characteristics:
 Current gaps:
 - No explicit keyboard focus styling system.
 - No ARIA landmarks/advanced semantic annotations for dynamic telemetry.
+- Icon-only controls rely on `title`/visual context and do not provide robust text alternatives for assistive tech.
+- Real-time status/value updates are not announced through live regions for screen reader users.
 - No reduced-motion conditional handling for animation-heavy elements.
 
 Guidance: preserve current visual system while adding non-visual support progressively.
@@ -402,7 +405,7 @@ Guidance: preserve current visual system while adding non-visual support progres
 
 ## 17. Current Backend Mapping
 Endpoint contract in the current implementation: `GET BASE_URL + "/data"` (CORS), polled every `POLL_MS = 3000`.
-`BASE_URL` is a configurable host string in `monitor.html` and should point to the active ESP32 endpoint for the environment.
+`BASE_URL` is currently set as a hardcoded constant in `monitor.html` (`const BASE_URL = "..."`) and is configured by editing that value to the active ESP32 host for the environment.
 
 Expected payload fields:
 - `temp` (body temp)
@@ -421,7 +424,7 @@ UI mapping (exact):
 - `peltier` → `#peltier-badge`, `#peltier-bar`, `#peltier-icon` spin class, `#ctrl-peltier`, event counts.
 - `humidifier` → `#humidifier-badge`, `#humidifier-bar`, `#ctrl-humidifier`, event counts.
 - `temp` is documented in UI as mapping reference but **not consumed in runtime update path**.
-- **Important:** displayed temperature is simulated (`SIMULATED_TEMP = 36.8` with ±`0.12` oscillation every 2s), in both demo and non-demo modes.
+- **Important:** displayed temperature is simulated (`SIMULATED_TEMP = 36.8` with ±`0.12` oscillation every 2s), in both demo and non-demo modes, consistent with the current prototype iteration.
 
 Error handling:
 - Fetch failure triggers `setConn('lost')` and initial warning event.
