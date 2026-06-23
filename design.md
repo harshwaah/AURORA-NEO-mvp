@@ -128,7 +128,7 @@ Interaction behavior:
 ---
 
 ## 7. Screen Documentation
-## Home Screen (`index.html`)
+### Home Screen (`index.html`)
 **Purpose**: Ward-level triage and entry to live bed.
 
 **Hierarchy**:
@@ -153,7 +153,7 @@ Interaction behavior:
 - Most non-Bed 04 items are visual placeholders (no drill-down routes).
 - No keyboard focus styling overrides beyond browser defaults.
 
-## Live Monitor Screen (`monitor.html`)
+### Live Monitor Screen (`monitor.html`)
 **Purpose**: single-bed real-time telemetry + trend analysis + event context + threshold/control transparency.
 
 **Hierarchy**:
@@ -369,7 +369,7 @@ Guidance: preserve current visual system while adding non-visual support progres
 
 ---
 
-## 15. Responsive Behaviour
+## 15. Responsive Behavior
 ### Desktop (lg/xl)
 - Home: fixed left sidebar + 3-column patient grid.
 - Monitor: full bento proportions with top tab bar visible.
@@ -394,13 +394,13 @@ Guidance: preserve current visual system while adding non-visual support progres
 - **Loading**: placeholders (`--`, “Awaiting data”, chart placeholders).
 - **Polling**: fetch interval every 3000ms in non-demo.
 - **Refresh model**: periodic overwrite of live value nodes + rolling history arrays.
-- **Offline behaviour**: connection badge/system badge switch to lost/disconnected; warning event added on first failure.
+- **Offline behavior**: connection badge/system badge switch to lost/disconnected; warning event added on first failure.
 - **Recovery**: next successful fetch restores live state and updates UI seamlessly.
 
 ---
 
 ## 17. Current Backend Mapping
-Endpoint contract: `GET http://192.168.1.45/data` (CORS), polled every `POLL_MS = 3000`.
+Endpoint contract in the current implementation: `GET BASE_URL + "/data"` with `BASE_URL = "http://192.168.1.45"` (CORS), polled every `POLL_MS = 3000`.
 
 Expected payload fields:
 - `temp` (body temp)
