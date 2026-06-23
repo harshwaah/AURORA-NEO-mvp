@@ -243,7 +243,8 @@ Interaction behavior:
 - Logic: stable >=95, watch 90–94, critical <90.
 
 ### Body Temperature
-- Data label maps to `temp`, but rendered from simulated value around `36.8` with ±`0.12` oscillation.
+- **Important implementation note:** Data label maps to `temp`, but the displayed value is not read from backend runtime updates.
+- Rendered value is simulated from `SIMULATED_TEMP = 36.8` with ±`0.12` oscillation, updated every 2 seconds.
 - Display: largest number on page, pink temperature panel.
 
 ### Ambient Temperature
@@ -400,7 +401,8 @@ Guidance: preserve current visual system while adding non-visual support progres
 ---
 
 ## 17. Current Backend Mapping
-Endpoint contract in the current implementation: `GET BASE_URL + "/data"` with `BASE_URL = "http://192.168.1.45"` (CORS), polled every `POLL_MS = 3000`.
+Endpoint contract in the current implementation: `GET BASE_URL + "/data"` (CORS), polled every `POLL_MS = 3000`.
+`BASE_URL` is a configurable host string in `monitor.html` and should point to the active ESP32 endpoint for the environment.
 
 Expected payload fields:
 - `temp` (body temp)
@@ -418,7 +420,8 @@ UI mapping (exact):
 - `hum` → `#val-hum`, analytics history `histData.hum`, min/max/avg panel.
 - `peltier` → `#peltier-badge`, `#peltier-bar`, `#peltier-icon` spin class, `#ctrl-peltier`, event counts.
 - `humidifier` → `#humidifier-badge`, `#humidifier-bar`, `#ctrl-humidifier`, event counts.
-- `temp` is documented in UI as mapping reference but **not consumed in runtime update path**; displayed temp is simulated (`SIMULATED_TEMP` + oscillation every 2s).
+- `temp` is documented in UI as mapping reference but **not consumed in runtime update path**.
+- **Important:** displayed temperature is simulated (`SIMULATED_TEMP = 36.8` with ±`0.12` oscillation every 2s), in both demo and non-demo modes.
 
 Error handling:
 - Fetch failure triggers `setConn('lost')` and initial warning event.
