@@ -244,7 +244,7 @@ Interaction behavior:
 
 ### Body Temperature
 - **Important implementation note:** The UI label and mapping chip reference backend field key `temp`, but the displayed temperature value is not read from backend runtime updates.
-- Rendered value is simulated from `SIMULATED_TEMP = 36.8` with symmetric ±`0.12` oscillation (effective value range 36.68–36.92°C before display rounding), updated every 2 seconds.
+- Rendered value is simulated from `SIMULATED_TEMP = 36.8` with symmetric ±`0.12` amplitude oscillation (effective value range 36.68–36.92°C before display rounding), updated every 2 seconds.
 - This matches the current prototype/hackathon implementation where body temperature is intentionally simulated in this dashboard iteration for presentation stability and hardware-stage constraints.
 - Display: largest number on page, pink temperature panel.
 
@@ -385,7 +385,7 @@ Guidance: preserve current visual system while adding non-visual support progres
 ### Mobile
 - Home sidebar removed, bottom nav appears.
 - Home grid single column.
-- Monitor top tabs hidden under `lg` (content panels still exist and can be switched by any alternative UI control that calls the same tab-switch function).
+- Monitor top tabs hidden under `lg`; no dedicated mobile tab-switch control is currently implemented in this file (known current limitation).
 
 ### Large monitors
 - Monitor constrained by `max-w-[1520px]` to avoid over-stretched readability.
@@ -407,6 +407,7 @@ Guidance: preserve current visual system while adding non-visual support progres
 Endpoint contract in the current implementation: `GET BASE_URL + "/data"` (CORS), polled every `POLL_MS = 3000`.
 `BASE_URL` is currently set as a hardcoded constant in `monitor.html` runtime script (`const BASE_URL = "..."` in the main constants block) and is configured by editing that value to the active ESP32 host for the environment.
 This manual constant edit is the current intended prototype configuration approach.
+Future hardening direction: move endpoint configuration to an external runtime/build configuration source instead of code edits.
 
 Expected payload fields:
 - `temp` (body temp)
@@ -426,6 +427,7 @@ UI mapping (exact):
 - `humidifier` → `#humidifier-badge`, `#humidifier-bar`, `#ctrl-humidifier`, event counts.
 - `temp` is documented in UI as mapping reference but **not consumed in runtime update path**.
 - See Body Temperature card documentation (Section 9) for exact simulated temperature behavior and rationale; this same simulation path is used in both demo and non-demo modes.
+- Transparency requirement for future UI updates: include an explicit on-screen indicator whenever a displayed metric is simulated rather than sensor-derived.
 
 Error handling:
 - Fetch failure triggers `setConn('lost')` and initial warning event.
