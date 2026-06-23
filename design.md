@@ -365,7 +365,7 @@ Current implementation characteristics:
 Current gaps:
 - No explicit keyboard focus styling system.
 - No ARIA landmarks/advanced semantic annotations for dynamic telemetry.
-- Icon-only controls (for example the header back arrow, notifications bell buttons, and similar symbol-only controls) currently use HTML `title` attributes and surrounding visual context, but do not provide robust ARIA text alternatives.
+- Icon-only controls (for example, the header back arrow, notifications bell buttons, and similar symbol-only controls) currently use HTML `title` attributes and surrounding visual context, but do not provide robust ARIA text alternatives.
 - Real-time status/value updates are not announced through live regions for screen reader users.
 - No reduced-motion conditional handling for animation-heavy elements.
 
@@ -385,7 +385,7 @@ Guidance: preserve current visual system while adding non-visual support progres
 ### Mobile
 - Home sidebar removed, bottom nav appears.
 - Home grid single column.
-- Monitor top tabs hidden under `lg` (content still switchable if buttons surfaced externally).
+- Monitor top tabs hidden under `lg` (content panels still exist and can be switched by any alternative UI control that calls the same tab-switch function).
 
 ### Large monitors
 - Monitor constrained by `max-w-[1520px]` to avoid over-stretched readability.
