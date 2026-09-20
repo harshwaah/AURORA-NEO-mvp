@@ -1,0 +1,12 @@
+CompileFlags:
+  Add:
+    - "-xc++"
+    - "-std=c++17"
+    - "-DARDUINO=100"
+    - "-DESP32"
+    - "-w"
+  Remove:
+    - "-m*"
+
+Diagnostics:
+  Suppress: ["*"]

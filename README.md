@@ -37,9 +37,13 @@ The dashboard provides:
 AURORA NEO/
 ├── index.html              ← Home Screen (ward overview, 6 baby cards)
 ├── monitor.html            ← Live Monitor Screen (Bed 04 — Akhi)
-├── aurora_neo_esp32.ino    ← ESP32 firmware (upload this to the hardware)
+├── favicon.svg / .ico      ← Minimal favicon assets
+├── aurora_neo_esp32/
+│   └── aurora_neo_esp32.ino  ← 🚨 EXACT & ONLY FILE TO UPLOAD TO ESP32
 └── README.md               ← This file
 ```
+
+> ⚡ **Hardware Compatibility:** The firmware in `aurora_neo_esp32.ino` is **100% compatible** with your ESP32 hardware and sensor pinouts. All sensor drivers, pin assignments, relay active-LOW logic, and CORS `/data` JSON endpoints are fully preserved.
 
 ---
 

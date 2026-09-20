@@ -80,9 +80,14 @@ void addCORSHeaders() {
 // The full SaaS dashboard is served separately as index.html + monitor.html
 String webpage = R"rawliteral(
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AURORA NEO — Smart Baby Incubator</title>
+<meta name="description" content="Direct ESP32 telemetry server for AURORA NEO smart neonatal incubator">
+<meta name="theme-color" content="#0b132b">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32'><defs><linearGradient id='a' x1='0' y1='1' x2='1' y2='0'><stop offset='0' stop-color='%237e5b64'/><stop offset='0.5' stop-color='%23c12048'/><stop offset='1' stop-color='%23ffd1dc'/></linearGradient><linearGradient id='b' x1='0' y1='0' x2='1' y2='0'><stop offset='0' stop-color='%23ffd1dc'/><stop offset='0.5' stop-color='%2310b981'/><stop offset='1' stop-color='%23ffffff'/></linearGradient><radialGradient id='g' cx='50%25' cy='50%25' r='50%25'><stop offset='0' stop-color='%23ffd1dc' stop-opacity='0.9'/><stop offset='1' stop-color='%23ffd1dc' stop-opacity='0'/></radialGradient></defs><rect width='32' height='32' rx='8' fill='%231b1e2e'/><circle cx='16' cy='11' r='5' fill='url(%23g)'/><path d='M6.5 21.5 C6.5 12.5 25.5 12.5 25.5 21.5' fill='none' stroke='url(%23a)' stroke-width='2.5' stroke-linecap='round'/><path d='M7 21.5 H12 L14.5 15.5 L17.5 25.5 L20 19 L22 21.5 H25' fill='none' stroke='url(%23b)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/><circle cx='16' cy='10.5' r='2' fill='%23ffd1dc'/></svg>">
 <style>
 body{font-family:Arial;text-align:center;background:#0b132b;color:white;}
 .card{background:#1c2541;padding:20px;margin:20px;border-radius:15px;font-size:22px;}
@@ -206,6 +211,12 @@ void handleOptions() {
   server.send(204);   // No Content — just headers are enough
 }
 
+// Handles browser favicon requests directly to avoid 404 logs
+void handleFavicon() {
+  addCORSHeaders();
+  server.send(204);   // No Content — favicon is embedded as SVG data URI in webpage
+}
+
 // ── SETUP ─────────────────────────────────────────────────────────────────────
 void setup() {
   Serial.begin(115200);
@@ -234,9 +245,10 @@ void setup() {
   Serial.println("Dashboard data endpoint: http://" + WiFi.localIP().toString() + "/data");
 
   // Register routes
-  server.on("/",        HTTP_GET,     handleRoot);
-  server.on("/data",    HTTP_GET,     handleData);
-  server.on("/data",    HTTP_OPTIONS, handleOptions);  // ← NEW: CORS preflight
+  server.on("/",            HTTP_GET,     handleRoot);
+  server.on("/data",        HTTP_GET,     handleData);
+  server.on("/data",        HTTP_OPTIONS, handleOptions);  // CORS preflight
+  server.on("/favicon.ico", HTTP_GET,     handleFavicon);  // Browser favicon
 
   server.begin();
   Serial.println("Web server started.");
