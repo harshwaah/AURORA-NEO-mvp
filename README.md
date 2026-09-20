@@ -13,6 +13,8 @@
 ![DHT22](https://img.shields.io/badge/Sensor-DHT22-green?style=flat-square)
 ![HTML](https://img.shields.io/badge/Dashboard-HTML%2FJS-orange?style=flat-square&logo=html5)
 ![TailwindCSS](https://img.shields.io/badge/Styling-TailwindCSS-38bdf8?style=flat-square&logo=tailwindcss)
+![Netlify](https://img.shields.io/badge/Deployment-Netlify-00C7B7?style=flat-square&logo=netlify)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e263de50-16ea-4167-917c-056423149425/deploy-status)](https://app.netlify.com/projects/aurora-neo/deploys)
 ![License](https://img.shields.io/badge/License-MIT-purple?style=flat-square)
 
 </div>
